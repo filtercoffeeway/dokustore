@@ -8,11 +8,11 @@ class UserDAO:
     def get_user(user_id):
         with oracledb.connect(user=uname, password=pwd, dsn=dsn, config_dir=cdir, wallet_location=wltloc, wallet_password=wltpwd) as connection:
             with connection.cursor() as cursor:
-                sql = """SELECT id, first_name FROM users WHERE id = :user_id"""
+                sql = """SELECT id, first_name, last_name FROM users WHERE id = :user_id"""
                 cursor.execute(sql, user_id=user_id)
                 result = cursor.fetchone()
                 
                 if result:
-                    return User(result[0], result[1])
+                    return User(result[0], result[1], result[2])
                 else:
                     return None
