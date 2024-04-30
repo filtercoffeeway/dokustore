@@ -92,9 +92,6 @@ def create_user():
         try:
             # Call the DAO method to create user
             res, user_id, error = UserDAO.create_user(data)
-            print(res)
-            print(user_id)
-            print(error)
             if res:
                 new_user = UserDAO.get_user(user_id)
                 if new_user:
