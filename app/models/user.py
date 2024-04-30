@@ -8,7 +8,7 @@ class User():
     first_name: str
     last_name: str
     email: str
-    phone: int
+    phone: str
     status: str
     verified_at: Optional[datetime] = None
     created_at: Optional[datetime] = None
