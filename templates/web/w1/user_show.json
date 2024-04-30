@@ -1,0 +1,14 @@
+{
+    "id": "{{ user.id }}",
+    "first_name": "{{ user.first_name }}",
+    "last_name": "{{ user.last_name }}",
+    "email": "{{ user.email }}",
+    "phone": "{{ user.phone }}",
+    "active": "{{ user.status }}",
+    "created_at": "{{ user.created_at }}",
+    "updated_at": "{{ user.updated_at }}",
+    "username": "{{ user.username }}",
+    "deactivated_at": "{{ user.deactivated_at }}",
+    "verified_at": "{{ user.verified_at }}"
+}
+  

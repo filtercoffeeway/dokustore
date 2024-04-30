@@ -1,5 +1,17 @@
-class User:
-    def __init__(self, id, first_name, last_name):
-        self.id = id
-        self.first_name = first_name
-        self.last_name = last_name
+from dataclasses import dataclass, field
+from typing import Optional
+from datetime import datetime
+
+@dataclass
+class User():
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    phone: int
+    status: str
+    verified_at: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    username: Optional[str] = None
+    deactivated_at: Optional[datetime] = None
