@@ -81,7 +81,7 @@ def update_user(user_id):
         return response
     
 
-@user_view.route('/w1/user', methods=['POST'])
+@user_view.route('/w1/users', methods=['POST'])
 def create_user():
     if request.headers.get('Content-Type') == 'application/json':
         template = 'templates/web/w1/user_show.json'
@@ -115,7 +115,7 @@ def create_user():
         return jsonify({'error': 'Invalid request. Expected Content-Type: application/json'}), 400  # Return error with status code 400 (Bad Request)
 
 
-@user_view.route('/w1/user/<int:user_id>', methods=['DELETE'])
+@user_view.route('/w1/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     try:
         # Call the DAO method to delete user

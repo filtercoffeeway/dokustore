@@ -22,3 +22,20 @@ CREATE TABLE users (
     CONSTRAINT unique_username UNIQUE (username),
     CONSTRAINT unique_email UNIQUE (email)
 );
+
+-- Create a sequence
+CREATE SEQUENCE document_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+
+CREATE TABLE document_types (
+  id NUMBER DEFAULT document_type_id_seq.NEXTVAL PRIMARY KEY,
+  document_type VARCHAR2(255) UNIQUE,
+  user_id NUMBER,
+  status VARCHAR2(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);
