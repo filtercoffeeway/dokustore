@@ -39,3 +39,28 @@ CREATE TABLE document_types (
   updated_at TIMESTAMP,
   CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+
+-- Create a sequence
+CREATE SEQUENCE document_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+
+CREATE TABLE documents (
+  id NUMBER DEFAULT document_id_seq.NEXTVAL PRIMARY KEY,
+  document_name VARCHAR2(255) UNIQUE,
+  document_type_id INTEGER,
+  user_id NUMBER,
+  status VARCHAR2(100),
+  file_id VARCHAR2(255),
+  file_path VARCHAR2(255),
+  file_size FLOAT,
+  file_type VARCHAR2(50),
+  due_date TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_document_type_id FOREIGN KEY (document_type_id) REFERENCES document_types(id),
+  CONSTRAINT fk_document_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);

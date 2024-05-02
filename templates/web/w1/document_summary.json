@@ -1,0 +1,5 @@
+{
+    "total_document": {{ summary.total_documents }},
+    "total_file_size": {{ summary.total_file_size }},
+    "documents_past_due": {{ summary.documents_past_due }}
+}

@@ -1,9 +1,9 @@
 [
     {% for document_type in document_types %}
     {
-        "id": "{{ document_type.id }}",
+        "id": {{ document_type.id }},
         "document_type": "{{ document_type.document_type }}",
-        "user_id": "{{ document_type.user_id }}",
+        "user_id": {{ document_type.user_id }},
         "status": "{{ document_type.status }}",
         "created_at": "{{ document_type.created_at }}",
         "updated_at": "{{ document_type.updated_at }}"
