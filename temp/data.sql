@@ -4,10 +4,10 @@ VALUES ('poorna', 'chandrika', 'poorna@example.com', 1234567890, 'active');
 --drop table users;
 
 --drop table document_types;
-
-drop table documents;
-
-drop constraint fk_document_type_id;
+--
+--drop table documents;
+--
+--drop constraint fk_document_type_id;
 
 ALTER TABLE documents
 DROP CONSTRAINT fk_document_type_id;
