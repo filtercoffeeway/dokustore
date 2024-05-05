@@ -3,6 +3,7 @@ import oracledb
 from walletcredentials import uname, pwd, cdir, wltloc, wltpwd, dsn
 from app.models.user import User
 from app.db.extensions import db
+import bcrypt
 
 class UserDAO:
     @staticmethod
@@ -14,9 +15,94 @@ class UserDAO:
                             ,email
                             ,phone
                             ,status 
-                            ,username
                             ,created_at
                             ,updated_at
+                            ,auth_token
+                            ,auth_expires_at
+                            ,verification_token
+                            ,verified_at
+                            ,deactivated_at
+                        FROM users 
+                        WHERE id = :user_id"""
+            cursor.execute(sql, user_id=user_id)
+            result = cursor.fetchone()
+            
+            if result:
+                column_names = [description[0].lower() for description in cursor.description]
+                user_data = dict(zip(column_names, result))
+                return User(**user_data)
+            else:
+                return None
+            
+
+    @staticmethod
+    def get_user_by_email(email):
+        with db.get_cursor() as cursor:
+            sql = """SELECT  id
+                            ,first_name
+                            ,last_name 
+                            ,email
+                            ,phone
+                            ,status 
+                            ,password
+                            ,created_at
+                            ,updated_at
+                            ,verified_at
+                            ,deactivated_at
+                        FROM users 
+                        WHERE email = :email"""
+            
+            cursor.execute(sql, email=email)
+            result = cursor.fetchone()
+            
+            if result:
+                column_names = [description[0].lower() for description in cursor.description]
+                user_data = dict(zip(column_names, result))
+                return User(**user_data)
+            else:
+                return None
+            
+    
+    @staticmethod
+    def get_user_by_auth_token(auth_token):
+        with db.get_cursor() as cursor:
+            sql = """SELECT  id
+                            ,first_name
+                            ,last_name 
+                            ,email
+                            ,phone
+                            ,status 
+                            ,password
+                            ,created_at
+                            ,updated_at
+                            ,verified_at
+                            ,deactivated_at
+                        FROM users 
+                        WHERE auth_token = :auth_token"""
+            
+            cursor.execute(sql, auth_token=auth_token)
+            result = cursor.fetchone()
+            
+            if result:
+                column_names = [description[0].lower() for description in cursor.description]
+                user_data = dict(zip(column_names, result))
+                return User(**user_data)
+            else:
+                return None
+            
+
+    @staticmethod
+    def authenticate_user(username, password):
+        with db.get_cursor() as cursor:
+            sql = """SELECT  id
+                            ,first_name
+                            ,last_name 
+                            ,email
+                            ,phone
+                            ,status 
+                            ,created_at
+                            ,updated_at
+                            ,verification_token
                             ,verified_at
                             ,deactivated_at
                         FROM users 
@@ -41,7 +127,6 @@ class UserDAO:
                             ,email
                             ,phone
                             ,status 
-                            ,username
                             ,created_at
                             ,updated_at
                             ,verified_at
@@ -58,12 +143,41 @@ class UserDAO:
                 users.append(User(**user_data))
 
             return users
+        
+    
+    @staticmethod
+    def get_user_by_verification_token(verification_token):
+        with db.get_cursor() as cursor:
+            sql = """SELECT  id
+                            ,first_name
+                            ,last_name 
+                            ,email
+                            ,phone
+                            ,status
+                            ,verification_token
+                            ,verified_at
+                        FROM users 
+                        WHERE verification_token = :verification_token"""
+            
+            cursor.execute(sql, verification_token=verification_token)
+            result = cursor.fetchone()
+            
+            if result:
+                column_names = [description[0].lower() for description in cursor.description]
+                user_data = dict(zip(column_names, result))
+                return User(**user_data)
+            else:
+                return None
             
 
     @staticmethod
     def update_user(user_id, new_data):
         try:
             with db.get_cursor() as cursor:
+                if 'password' in new_data:
+                    hashed_password = bcrypt.hashpw(new_data['password'].encode('utf-8'), bcrypt.gensalt())
+                    new_data['password'] = hashed_password.decode('utf-8')
+
                 # Construct the UPDATE SQL statement
                 sql = "UPDATE users SET "
                 updates = []

@@ -1,0 +1,5 @@
+{
+    "user_id": {{ account.id }},
+    "auth_token": "{{ token }}",
+    "auth_expires_at": "{{ account.auth_expires_at }}"
+}

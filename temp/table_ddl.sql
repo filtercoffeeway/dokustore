@@ -13,13 +13,18 @@ CREATE TABLE users (
     email VARCHAR2(255),
     phone VARCHAR2(20),
     status VARCHAR2(255),
-    username VARCHAR2(255),
     password VARCHAR2(255),
+    login_retries NUMBER,
+    auth_token VARCHAR2(255),
+    auth_expires_at TIMESTAMP,
+    auth_created_at TIMESTAMP,
     verified_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT SYSTIMESTAMP,
-    updated_at TIMESTAMP,
+    verification_token varchar2(255),
+    password_reset_at TIMESTAMP,
+    password_reset_token varchar2(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT SYSTIMESTAMP,
     deactivated_at TIMESTAMP,
-    CONSTRAINT unique_username UNIQUE (username),
     CONSTRAINT unique_email UNIQUE (email)
 );
 

@@ -1,16 +1,10 @@
-INSERT INTO users (first_name, last_name, email, phone, status)
-VALUES ('poorna', 'chandrika', 'poorna@example.com', 1234567890, 'active');
+drop table users;
 
---drop table users;
+drop table document_types;
 
---drop table document_types;
---
---drop table documents;
---
---drop constraint fk_document_type_id;
+drop table documents;
 
-ALTER TABLE documents
-DROP CONSTRAINT fk_document_type_id;
+-----
 
 select * from users;
 
@@ -19,7 +13,14 @@ select * from document_types;
 
 select * from documents;
 
+----
 delete from documents;
+
+delete from document_types;
+
+delete from users;
+
+--
 
 SELECT id
                                 ,document_type

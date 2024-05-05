@@ -3,13 +3,15 @@ import json
 import traceback
 from app.daos.user import UserDAO
 user_view = Blueprint('user_view', __name__)
+from app.middleware.auth_middleware import token_required
 
-
-@user_view.route('/w1/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
+@user_view.route('/w1/user', methods=['GET'])
+@token_required
+def get_user(current_user):
+    print(current_user.id)
     if request.headers.get('Content-Type') == 'application/json':
         template = 'templates/web/w1/user_show.json'
-        user = UserDAO.get_user(user_id)
+        user = UserDAO.get_user(current_user.id)
         if user:
             json_output = render_template_string(open(template).read(), user=user)
             response = jsonify(user=json.loads(json_output))
@@ -26,7 +28,8 @@ def get_user(user_id):
 
 
 @user_view.route('/w1/users', methods=['GET'])
-def get_all_users():
+@token_required
+def get_all_users(current_user):
     if request.headers.get('Content-Type') == 'application/json':
         template = 'templates/web/w1/user_index.json'
         users = UserDAO.get_all_users()
@@ -45,8 +48,9 @@ def get_all_users():
         return response
     
 
-@user_view.route('/w1/users/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
+@user_view.route('/w1/user/update', methods=['PUT'])
+@token_required
+def update_user(current_user):
     if request.headers.get('Content-Type') == 'application/json':
         template = 'templates/web/w1/user_show.json'
         data = request.json
@@ -54,10 +58,10 @@ def update_user(user_id):
             return jsonify({'error': 'No data provided'}), 400
 
         try:
-            result, error = UserDAO.update_user(user_id, data)
+            result, error = UserDAO.update_user(current_user.id, data)
             if result is True:  # Check if update was successful
                 # Fetch the updated user from the database
-                updated_user = UserDAO.get_user(user_id)
+                updated_user = UserDAO.get_user(current_user.id)
                 if updated_user:
                     json_output = render_template_string(open(template).read(), user=updated_user)
                     response = jsonify(user=json.loads(json_output))
@@ -81,45 +85,12 @@ def update_user(user_id):
         return response
     
 
-@user_view.route('/w1/users', methods=['POST'])
-def create_user():
-    if request.headers.get('Content-Type') == 'application/json':
-        template = 'templates/web/w1/user_show.json'
-        data = request.json
-        if not data:
-            return jsonify({'error': 'No data provided'}), 400
-
-        try:
-            # Call the DAO method to create user
-            res, user_id, error = UserDAO.create_user(data)
-            if res:
-                new_user = UserDAO.get_user(user_id)
-                if new_user:
-                    json_output = render_template_string(open(template).read(), user=new_user)
-                    response = jsonify(user=json.loads(json_output))
-                    response.status_code = 200  # Set status code to 200 (OK)
-                    return response
-                else:
-                    response = jsonify({'error': 'User not found after update'})
-                    response.status_code = 404  # Set status code to 404 (Not Found)
-                    return response
-            else:
-                response = jsonify({'error': 'Failed to create user'})
-                response.status_code = 500  # Set status code to 500 (Internal Server Error)
-                return response
-        except Exception as e:
-            # Print exception message and traceback for debugging
-            traceback.print_exc()
-            return jsonify({'error': str(e)}), 500  # Return error message with status code 500 (Internal Server Error)
-    else:
-        return jsonify({'error': 'Invalid request. Expected Content-Type: application/json'}), 400  # Return error with status code 400 (Bad Request)
-
-
-@user_view.route('/w1/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
+@user_view.route('/w1/user/delete', methods=['DELETE'])
+@token_required
+def delete_user(current_user):
     try:
         # Call the DAO method to delete user
-        deleted_user = UserDAO.delete_user(user_id)
+        deleted_user = UserDAO.delete_user(current_user.id)
         if deleted_user:
             return jsonify({'message': 'User deleted successfully'}), 200  # Return success message with status code 200 (OK)
         else:

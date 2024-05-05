@@ -9,7 +9,6 @@
         "active": "{{ user.status }}",
         "created_at": "{{ user.created_at }}",
         "updated_at": "{{ user.updated_at }}",
-        "username": "{{ user.username }}",
         "deactivated_at": "{{ user.deactivated_at }}",
         "verified_at": "{{ user.verified_at }}"
     }
