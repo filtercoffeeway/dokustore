@@ -1,6 +1,0 @@
-uname = "admin"
-pwd = "Tsmahesh@1989"
-cdir = "./config/"
-wltloc = "./config/"
-wltpwd = "Tsmahesh@1989"
-dsn = "alpha_high"
